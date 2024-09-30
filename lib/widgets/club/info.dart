@@ -1,6 +1,6 @@
 import 'package:club/models/club.dart';
 import 'package:club/providers/available_clubs.dart';
-import 'package:club/providers/users_clubs.dart';
+import 'package:club/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +15,7 @@ class ClubInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final availableClubs = ref.read(availableClubsProvider.notifier);
-    final usersClubs = ref.read(userClubsProvider.notifier);
+    final usersClubs = ref.read(userProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(

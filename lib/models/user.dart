@@ -1,11 +1,11 @@
 import 'package:club/models/club.dart';
 
 class User {
-  const User({
+  User({
     required this.name,
     required this.userClubs,
   });
 
   final String name;
-  final List<Club> userClubs;
+  List<Club> userClubs;
 }

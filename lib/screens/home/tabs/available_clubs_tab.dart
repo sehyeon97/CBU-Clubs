@@ -12,10 +12,7 @@ class AvailableClubs extends ConsumerWidget {
     List<Club> availableClubs = ref.watch(availableClubsProvider);
 
     return Center(
-      child: CustomListView(
-        list: availableClubs,
-        tab: 0,
-      ),
+      child: CustomListView(list: availableClubs),
     );
   }
 }
