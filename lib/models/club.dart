@@ -10,4 +10,13 @@ class Club {
   final String description;
   final String president;
   final String advisor;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'description': description,
+      'president': president,
+      'advisor': advisor,
+    };
+  }
 }
