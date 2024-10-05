@@ -1,6 +1,1 @@
-{
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  }
-}
+{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"cbu-club","appId":"1:920090319161:android:c8cae22c73bc334cce30e8","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"cbu-club","configurations":{"android":"1:920090319161:android:c8cae22c73bc334cce30e8","ios":"1:920090319161:ios:4e796ad3506a81eace30e8"}}}}}}

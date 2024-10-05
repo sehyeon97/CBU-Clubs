@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920090319161",
+    "project_id": "cbu-club",
+    "storage_bucket": "cbu-club.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920090319161:android:c8cae22c73bc334cce30e8",
+        "android_client_info": {
+          "package_name": "com.example.club"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD122UCb_eH09PFP_F8o66U4Xt3QtEq9h8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
