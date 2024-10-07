@@ -20,12 +20,12 @@ class ClubInfo extends ConsumerWidget {
     final usersClubs = ref.read(userProvider.notifier);
 
     Future<void> addClub(Club club) async {
-      final CollectionReference userRef = FirebaseFirestore.instance.collection('users');
-      //await userRef.doc('Nathan DeVries').collection('clubs').add(club.toMap());
       CollectionReference clubs = FirebaseFirestore.instance.collection('clubs');
+      //CollectionReference userRef = FirebaseFirestore.instance.collection('users');
     
       try {
-        await clubs.add(club.toMap());
+        await clubs.doc(club.name).set(club.toMap());
+        //await userRef.doc('nsdevries').collection('clubs').add(club.toMap());
       } catch (e) {
         print("Failed to add club: $e");
       }
@@ -43,13 +43,14 @@ class ClubInfo extends ConsumerWidget {
           Text(club.advisor),
           const SizedBox(height: 20),
           ElevatedButton(
-              onPressed: () {
-                addClub(club);
-                usersClubs.addClub(club);
-                availableClubs.removeClub(club);
-                Navigator.of(context).pop();
-              },
-              child: const Text("Join Now"))
+            onPressed: () {
+              addClub(club);
+              usersClubs.addClub(club);
+              availableClubs.removeClub(club);
+              Navigator.of(context).pop();
+            },
+            child: const Text("Join Now")
+          )
         ],
       ),
     );
