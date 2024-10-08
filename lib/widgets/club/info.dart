@@ -4,6 +4,8 @@ import 'package:club/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ClubInfo extends ConsumerWidget {
   const ClubInfo({
     super.key,
@@ -17,6 +19,18 @@ class ClubInfo extends ConsumerWidget {
     final availableClubs = ref.read(availableClubsProvider.notifier);
     final usersClubs = ref.read(userProvider.notifier);
 
+    Future<void> addClub(Club club) async {
+      CollectionReference clubs = FirebaseFirestore.instance.collection('clubs');
+      //CollectionReference userRef = FirebaseFirestore.instance.collection('users');
+    
+      try {
+        await clubs.doc(club.name).set(club.toMap());
+        //await userRef.doc('nsdevries').collection('clubs').add(club.toMap());
+      } catch (e) {
+        print("Failed to add club: $e");
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -29,12 +43,14 @@ class ClubInfo extends ConsumerWidget {
           Text(club.advisor),
           const SizedBox(height: 20),
           ElevatedButton(
-              onPressed: () {
-                usersClubs.addClub(club);
-                availableClubs.removeClub(club);
-                Navigator.of(context).pop();
-              },
-              child: const Text("Join Now"))
+            onPressed: () {
+              addClub(club);
+              usersClubs.addClub(club);
+              availableClubs.removeClub(club);
+              Navigator.of(context).pop();
+            },
+            child: const Text("Join Now")
+          )
         ],
       ),
     );
