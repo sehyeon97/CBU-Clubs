@@ -1,14 +1,20 @@
-import 'package:club/data/test.dart';
+import 'package:club/algorithms/sort_club.dart';
+import 'package:club/data/retrieve_json.dart';
 import 'package:club/models/club.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ClubNotifier extends StateNotifier<List<Club>> {
-  ClubNotifier() : super(getClubsDetails());
+  ClubNotifier() : super(AllClubsFromWeb().getClubsFromWeb());
 
-  // at this point, the list is not alphabetical
-  // need to change this in the future
   void addClub(Club club) {
-    state = [...state, club];
+    if (state.isEmpty) {
+      state = [...state, club];
+    } else {
+      List<Club> temp = [];
+      temp.addAll(state);
+      ClubSort clubSort = ClubSort(clubs: temp, clubToAdd: club);
+      state = clubSort.getSortedClubs();
+    }
   }
 
   void removeClub(Club club) {
@@ -17,12 +23,6 @@ class ClubNotifier extends StateNotifier<List<Club>> {
     temp.remove(club);
     state = temp;
   }
-}
-
-// This is a placeholder method for now
-// and will be used when the web scraper or database supplies data
-List<Club> getClubsDetails() {
-  return test;
 }
 
 final availableClubsProvider =

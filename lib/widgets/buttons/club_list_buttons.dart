@@ -1,8 +1,8 @@
 import 'package:club/models/club.dart';
 import 'package:club/models/user.dart';
 import 'package:club/providers/user_provider.dart';
+import 'package:club/widgets/club/club_home/selected_club_home.dart';
 import 'package:club/widgets/club/info.dart';
-import 'package:club/widgets/club/selected_club_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,9 +30,6 @@ class CustomElevatedButton extends ConsumerWidget {
             }),
           );
         },
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size(100, 80),
-        ),
         child: Text(club.name),
       ),
     );
