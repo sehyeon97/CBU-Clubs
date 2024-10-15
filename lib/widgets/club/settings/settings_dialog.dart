@@ -1,7 +1,4 @@
 import 'package:club/models/club.dart';
-import 'package:club/providers/available_clubs.dart';
-import 'package:club/providers/user_provider.dart';
-import 'package:club/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,20 +8,17 @@ class Settings extends ConsumerWidget {
     required this.club,
   });
 
-  // todo: change to user-specific club
   final Club club;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final availableClubs = ref.read(availableClubsProvider.notifier);
-    final usersClubs = ref.read(userProvider.notifier);
-
     return AlertDialog(
       content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(height: 20),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.person),
@@ -43,25 +37,6 @@ class Settings extends ConsumerWidget {
           ),
           const Text("Notifications"),
           const SizedBox(height: 20),
-          IconButton(
-            onPressed: () {
-              availableClubs.addClub(club);
-              usersClubs.removeClub(club);
-              Navigator.of(context)
-                ..pop()
-                ..pop();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const HomeScreen();
-                  },
-                ),
-              );
-            },
-            icon: const Icon(Icons.door_sliding),
-          ),
-          const Text("Leave Club"),
         ],
       ),
     );

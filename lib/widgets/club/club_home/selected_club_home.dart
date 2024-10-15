@@ -1,4 +1,5 @@
 import 'package:club/models/club.dart';
+import 'package:club/screens/home/home.dart';
 import 'package:club/widgets/club/club_home/tabs/announcements.dart';
 import 'package:club/widgets/club/club_home/tabs/events.dart';
 import 'package:club/widgets/club/club_home/tabs/group_chat.dart';
@@ -39,7 +40,14 @@ class _ClubHomeState extends State<ClubHome> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const HomeScreen();
+                },
+              ),
+            );
           },
         ),
         title: Text(widget.club.name),
