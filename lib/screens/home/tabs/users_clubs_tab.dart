@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:club/models/club.dart';
 import 'package:club/screens/club_home/selected_club_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final _firebase = FirebaseFirestore.instance;
+final String userID = FirebaseAuth.instance.currentUser!.uid;
 
 class UsersClubs extends StatefulWidget {
   const UsersClubs({super.key});
@@ -12,36 +17,37 @@ class UsersClubs extends StatefulWidget {
 }
 
 class _UsersClubsState extends State<UsersClubs> {
-  late Future<List<Club>> _clubs;
+  void _removeClub(Map<String, dynamic> club) async {
+    // Remove given club from user's joined clubs in db
+    final userData = await _firebase.collection('users').doc(userID).get();
+    List joinedClubs = userData.data()!['joined_clubs'];
+    joinedClubs.removeWhere(((element) => element['name'] == club['name']));
 
-  @override
-  void initState() {
-    super.initState();
-    _clubs = _loadClubs();
-  }
+    await _firebase
+        .collection('users')
+        .doc(userID)
+        .set({'joined_clubs': joinedClubs});
 
-  Future<List<Club>> _loadClubs() async {
-    List<Club> _loadedClubs = [];
-    // todo: fetch user's joined clubs list from database here.
-    // todo: iterate through and add each club to _loadedClubs
-    // todo: should be similar to loadClubsFromJson() in available_clubs_tab.dart
-    return _loadedClubs;
-  }
-
-  void _removeClub(Club club) {
-    setState(() {
-      // todo: Remove club from user's joined club list
-      // todo: Add to user's available club list
-      // todo: fetch the updated user's joined club list and
-      // todo: set that to _clubs
+    // Add given club to user's available clubs
+    List availableClubs = userData.data()!['available_clubs'];
+    availableClubs.add({
+      'name': club['name'],
+      'description': club['description'],
+      'president': club['president'],
+      'advisor': club['advisor'],
     });
+
+    await _firebase
+        .collection('users')
+        .doc(userID)
+        .update({'available_clubs': availableClubs});
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FutureBuilder(
-        future: _clubs,
+      child: StreamBuilder(
+        stream: _firebase.collection('users').doc(userID).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,8 +57,16 @@ class _UsersClubsState extends State<UsersClubs> {
             return Center(child: Text(snapshot.error.toString()));
           }
 
+          Map<String, dynamic> userData = snapshot.data!.data()!;
+          List<dynamic> joinedClubs = userData['joined_clubs'];
+
+          if (joinedClubs.isEmpty) {
+            return const Center(
+                child: Text('You haven\'t joined any clubs :('));
+          }
+
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: joinedClubs.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -67,13 +81,17 @@ class _UsersClubsState extends State<UsersClubs> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Center(child: Text("Leave Club?")),
+                              Center(
+                                  child: Text(
+                                      "Leave ${joinedClubs[index]['name']} Club?")),
                               const SizedBox(height: 16.0),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
                                   TextButton(
                                     onPressed: () {
-                                      _removeClub(snapshot.data![index]);
+                                      _removeClub(joinedClubs[index]);
                                       Navigator.of(dialogContext).pop();
                                     },
                                     child: const Text("Yes"),
@@ -97,12 +115,22 @@ class _UsersClubsState extends State<UsersClubs> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return ClubHome(club: snapshot.data![index]);
+                          // todo: below code is a temporary solution
+                          // todo: Need to change this to point to a club
+                          // todo: in clubs collection in firestore
+                          return ClubHome(
+                            club: Club(
+                              name: joinedClubs[index]['name'],
+                              description: joinedClubs[index]['description'],
+                              president: joinedClubs[index]['president'],
+                              advisor: joinedClubs[index]['advisor'],
+                            ),
+                          );
                         },
                       ),
                     );
                   },
-                  child: Text(snapshot.data![index].name),
+                  child: Text(joinedClubs[index]['name']),
                 ),
               );
             },

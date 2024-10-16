@@ -5,7 +5,6 @@ class Announcements extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return const Center(child: Text("Unimplemented atm"));
   }
 }

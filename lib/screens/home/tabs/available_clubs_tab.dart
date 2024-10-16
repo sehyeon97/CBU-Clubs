@@ -1,8 +1,12 @@
 import 'dart:convert';
 
-import 'package:club/models/club.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+final _firebase = FirebaseFirestore.instance;
+final String userID = FirebaseAuth.instance.currentUser!.uid;
 
 class AvailableClubs extends StatefulWidget {
   const AvailableClubs({super.key});
@@ -14,54 +18,75 @@ class AvailableClubs extends StatefulWidget {
 }
 
 class _AvailableClubsState extends State<AvailableClubs> {
-  late Future<List<Club>> _clubs;
-
   @override
   void initState() {
     super.initState();
-    // todo: this method runs once, when the app starts.
-    // todo: if the user has available list data in database,
-    // todo: this should fetch from database, otherwise it should fetch from
-    // todo: the json which is _loadClubsFromJson()
-    _clubs = _loadClubsFromJson();
+    _loadClubs();
   }
 
-  Future<List<Club>> _loadClubsFromJson() async {
-    String response = await rootBundle.loadString('lib/data/output.json');
-    final List data = await json.decode(response);
-    final List<Club> loadedClubs = [];
+  Future<void> _loadClubs() async {
+    final userData = await _firebase.collection('users').doc(userID).get();
 
-    for (final obj in data) {
-      loadedClubs.add(
-        Club(
-          name: obj["title"],
-          description: obj["description"],
-          president: obj["president"],
-          advisor: obj["advisor"],
-        ),
-      );
+    if (userData.data() == null) {}
+
+    final List availableClubs = userData.data()!['available_clubs'];
+
+    // user has no available clubs in database (new user)
+    if (availableClubs.isEmpty) {
+      final List<Map<String, String>> dataForFirestore = [];
+
+      // populate app's club list with clubs in json file
+      String response = await rootBundle.loadString('lib/data/output.json');
+      final List data = await json.decode(response);
+
+      for (final obj in data) {
+        dataForFirestore.add({
+          'name': obj['title'],
+          'description': obj['description'],
+          'president': obj['president'],
+          'advisor': obj['advisor'],
+        });
+      }
+
+      // add the app's club list to user's available clubs in firestore
+      await _firebase.collection('users').doc(userID).update({
+        'available_clubs': dataForFirestore,
+      });
     }
-
-    return loadedClubs;
   }
 
-  void _removeClub(Club club) {
-    setState(() {
-      // todo: Remove this club from user's available clubs list in firebase
-      // todo: Add this club to user's joined club list
-      // todo: Set _clubs to fetch database for updated available clubs list
-      // Delete this comment later: Whenever setState() is called, the
-      // build method is called. Since the FutureBuilder runs off _clubs,
-      // by fetching updated data in database and setting _clubs to it,
-      // it should display the new available list for user
+  void _removeClub(Map<String, dynamic> club) async {
+    // Removing given club from user's available clubs in db
+    final userData = await _firebase.collection('users').doc(userID).get();
+
+    List availableClubs = userData.data()!['available_clubs'];
+    availableClubs.removeWhere((element) => element['name'] == club['name']);
+
+    await _firebase
+        .collection('users')
+        .doc(userID)
+        .set({'available_clubs': availableClubs});
+
+    // Add given club to user's joined clubs
+    List joinedClubs = userData.data()!['joined_clubs'];
+    joinedClubs.add({
+      'name': club['name'],
+      'description': club['description'],
+      'president': club['president'],
+      'advisor': club['advisor'],
     });
+
+    await _firebase
+        .collection('users')
+        .doc(userID)
+        .update({'joined_clubs': joinedClubs});
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FutureBuilder(
-        future: _clubs,
+      child: StreamBuilder(
+        stream: _firebase.collection('users').doc(userID).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -71,8 +96,11 @@ class _AvailableClubsState extends State<AvailableClubs> {
             return Center(child: Text(snapshot.error.toString()));
           }
 
+          Map<String, dynamic> userData = snapshot.data!.data()!;
+          List<dynamic> availableClubs = userData['available_clubs'];
+
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: availableClubs.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -87,14 +115,14 @@ class _AvailableClubsState extends State<AvailableClubs> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(snapshot.data![index].name),
-                                Text(snapshot.data![index].description),
-                                Text(snapshot.data![index].president),
-                                Text(snapshot.data![index].advisor),
+                                Text(availableClubs[index]['name']),
+                                Text(availableClubs[index]['description']),
+                                Text(availableClubs[index]['president']),
+                                Text(availableClubs[index]['advisor']),
                                 const SizedBox(height: 20),
                                 ElevatedButton(
                                   onPressed: () {
-                                    _removeClub(snapshot.data![index]);
+                                    _removeClub(availableClubs[index]);
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text("Join now!"),
@@ -104,7 +132,7 @@ class _AvailableClubsState extends State<AvailableClubs> {
                           );
                         });
                   },
-                  child: Text(snapshot.data![index].name),
+                  child: Text(availableClubs[index]['name']),
                 ),
               );
             },

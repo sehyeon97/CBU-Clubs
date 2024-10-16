@@ -91,6 +91,7 @@ class _ClubHomeState extends State<ClubHome> {
           onBarItemTap(value);
         },
       ),
+      body: tabs[_selectedIndex],
     );
   }
 }

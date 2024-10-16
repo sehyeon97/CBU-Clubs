@@ -20,14 +20,10 @@ class MainApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         home: StreamBuilder(
-          // this stream points to whether the user has logged in before
+          // if this user has been authenticated via login previously,
+          // then go straight to Home screen instead of showing login screen
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            // if this user has logged in before and
-            // therefore has data in firebase, then go straight to
-            // Home screen instead of showing login screen
-            // it can still go to login screen if that
-            // user authentication token state expired
             if (snapshot.hasData) {
               return const HomeScreen();
             }

@@ -12,7 +12,6 @@ class GroupChat extends StatefulWidget {
 class _GroupChatState extends State<GroupChat> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return const Center(child: Text("Unimplemented atm"));
   }
 }
