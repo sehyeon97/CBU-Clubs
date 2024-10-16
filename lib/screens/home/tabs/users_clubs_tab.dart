@@ -1,5 +1,5 @@
 import 'package:club/models/club.dart';
-import 'package:club/widgets/club/club_home/selected_club_home.dart';
+import 'package:club/screens/club_home/selected_club_home.dart';
 import 'package:flutter/material.dart';
 
 class UsersClubs extends StatefulWidget {

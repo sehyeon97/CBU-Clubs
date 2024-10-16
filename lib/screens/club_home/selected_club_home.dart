@@ -1,9 +1,9 @@
 import 'package:club/models/club.dart';
 import 'package:club/screens/home/home.dart';
-import 'package:club/widgets/club/club_home/tabs/announcements.dart';
-import 'package:club/widgets/club/club_home/tabs/events.dart';
-import 'package:club/widgets/club/club_home/tabs/group_chat.dart';
-import 'package:club/widgets/club/settings/settings_dialog.dart';
+import 'package:club/screens/club_home/tabs/announcements.dart';
+import 'package:club/screens/club_home/tabs/events.dart';
+import 'package:club/screens/club_home/tabs/group_chat.dart';
+import 'package:club/widgets/settings/settings_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ClubHome extends StatefulWidget {
