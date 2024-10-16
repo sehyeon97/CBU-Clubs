@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'cbu-club.appspot.com',
     iosBundleId: 'com.example.club',
   );
+
 }
