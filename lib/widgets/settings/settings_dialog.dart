@@ -27,12 +27,6 @@ class Settings extends ConsumerWidget {
           const SizedBox(height: 20),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.leaderboard),
-          ),
-          const Text("Leaderboard"),
-          const SizedBox(height: 20),
-          IconButton(
-            onPressed: () {},
             icon: const Icon(Icons.notifications),
           ),
           const Text("Notifications"),

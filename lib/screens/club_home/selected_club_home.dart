@@ -1,4 +1,5 @@
 import 'package:club/models/club.dart';
+import 'package:club/screens/club_home/tabs/leaderboard.dart';
 import 'package:club/screens/home/home.dart';
 import 'package:club/screens/club_home/tabs/announcements.dart';
 import 'package:club/screens/club_home/tabs/events.dart';
@@ -24,6 +25,7 @@ class _ClubHomeState extends State<ClubHome> {
   final tabs = const [
     Announcements(),
     Events(),
+    Leaderboard(),
     GroupChat(),
   ];
 
@@ -74,6 +76,10 @@ class _ClubHomeState extends State<ClubHome> {
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
             label: "Events",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard),
+            label: "Leaderboard",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
