@@ -65,7 +65,7 @@ class _AvailableClubsState extends State<AvailableClubs> {
     await _firebase
         .collection('users')
         .doc(userID)
-        .set({'available_clubs': availableClubs});
+        .update({'available_clubs': availableClubs});
 
     // Add given club to user's joined clubs
     List joinedClubs = userData.data()!['joined_clubs'];
