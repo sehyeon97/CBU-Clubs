@@ -29,7 +29,7 @@ class _ClubHomeState extends State<ClubHome> {
     GroupChat(),
   ];
 
-  void onBarItemTap(int index) {
+  void onDrawerItemTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -39,22 +39,32 @@ class _ClubHomeState extends State<ClubHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const HomeScreen();
-                },
-              ),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(Icons.menu),
             );
           },
         ),
         title: Text(widget.club.name),
         centerTitle: true,
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const HomeScreen();
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(Icons.home)),
+          const SizedBox(width: 10.0),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -67,29 +77,41 @@ class _ClubHomeState extends State<ClubHome> {
           )
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.announcement),
-            label: "Announcements",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: "Events",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard),
-            label: "Leaderboard",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: "Chat",
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: (value) {
-          onBarItemTap(value);
-        },
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(child: Text('Menu')),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                onDrawerItemTap(0);
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Events'),
+              onTap: () {
+                onDrawerItemTap(1);
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Rankings'),
+              onTap: () {
+                onDrawerItemTap(2);
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Chat'),
+              onTap: () {
+                onDrawerItemTap(3);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
       ),
       body: tabs[_selectedIndex],
     );
