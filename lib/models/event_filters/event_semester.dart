@@ -1,0 +1,4 @@
+enum Semester {
+  fall,
+  spring,
+}

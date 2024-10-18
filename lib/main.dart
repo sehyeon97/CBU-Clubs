@@ -31,6 +31,7 @@ class MainApp extends StatelessWidget {
             return const Login();
           },
         ),
+        theme: ThemeData.dark(),
       ),
     );
   }
