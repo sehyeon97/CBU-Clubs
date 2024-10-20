@@ -3,6 +3,7 @@ import 'package:club/models/club.dart';
 import 'package:club/screens/club_home/selected_club_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:club/providers/firestore.dart';
 
 final _firebase = FirebaseFirestore.instance;
 final String userID = FirebaseAuth.instance.currentUser!.uid;
