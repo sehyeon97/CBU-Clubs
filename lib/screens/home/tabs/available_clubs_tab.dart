@@ -27,8 +27,6 @@ class _AvailableClubsState extends State<AvailableClubs> {
   Future<void> _loadClubs() async {
     final userData = await _firebase.collection('users').doc(userID).get();
 
-    if (userData.data() == null) {}
-
     final List availableClubs = userData.data()!['available_clubs'];
 
     // user has no available clubs in database (new user)
@@ -65,7 +63,7 @@ class _AvailableClubsState extends State<AvailableClubs> {
     await _firebase
         .collection('users')
         .doc(userID)
-        .set({'available_clubs': availableClubs});
+        .update({'available_clubs': availableClubs});
 
     // Add given club to user's joined clubs
     List joinedClubs = userData.data()!['joined_clubs'];

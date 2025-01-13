@@ -1,5 +1,6 @@
 import 'package:club/models/club.dart';
 import 'package:club/screens/club_home/tabs/leaderboard.dart';
+import 'package:club/screens/club_home/tabs/meeting_time.dart';
 import 'package:club/screens/home/home.dart';
 import 'package:club/screens/club_home/tabs/announcements.dart';
 import 'package:club/screens/club_home/tabs/events.dart';
@@ -27,6 +28,7 @@ class _ClubHomeState extends State<ClubHome> {
     Events(),
     Leaderboard(),
     GroupChat(),
+    MeetingTime(),
   ];
 
   void onDrawerItemTap(int index) {
@@ -107,6 +109,13 @@ class _ClubHomeState extends State<ClubHome> {
               title: const Text('Chat'),
               onTap: () {
                 onDrawerItemTap(3);
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Meeting Time'),
+              onTap: () {
+                onDrawerItemTap(4);
                 Navigator.of(context).pop();
               },
             ),
