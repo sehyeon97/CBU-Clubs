@@ -1,0 +1,4 @@
+enum EventView {
+  calendar,
+  list,
+}

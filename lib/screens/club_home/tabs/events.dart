@@ -1,32 +1,44 @@
+import 'package:club/models/event_filters/event_semester.dart';
+import 'package:club/models/event_filters/event_view.dart';
+import 'package:club/providers/event_filter_provider.dart';
+import 'package:club/widgets/events/calendar_view.dart';
+import 'package:club/widgets/events/filter.dart';
+import 'package:club/widgets/events/list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Events extends StatefulWidget {
+class Events extends ConsumerStatefulWidget {
   const Events({super.key});
 
   @override
-  State<Events> createState() => _EventsState();
+  ConsumerState<Events> createState() => _EventsState();
 }
 
-class _EventsState extends State<Events> {
-  final DateTime today = DateTime.now();
+class _EventsState extends ConsumerState<Events> {
+  void rebuild(Semester semester, EventView view) {
+    setState(() {
+      ref.read(eventSemesterProvider.notifier).setSemester(semester);
+      ref.read(eventViewProvider.notifier).setView(view);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-      focusedDay: today,
-      firstDay: DateTime(
-        today.year,
-        today.month,
-        today.day,
-      ),
-      lastDay: DateTime(
-        today.year,
-        today.month,
-        today.day + 30,
-      ),
-      calendarFormat: CalendarFormat.month,
-      onDaySelected: (selectedDay, focusedDay) {},
+    Semester semester = ref.watch(eventSemesterProvider);
+    EventView view = ref.watch(eventViewProvider);
+
+    return Column(
+      children: [
+        FilterEvents(
+          initalSemester: semester,
+          initialView: view,
+          rebuild: rebuild,
+        ),
+        if (view == EventView.calendar)
+          const CalendarView()
+        else
+          const ViewAsList()
+      ],
     );
   }
 }
