@@ -40,6 +40,9 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
   table_calendar: ^3.1.2
+  file_picker: ^8.1.7
+  archive: ^4.0.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,7 @@ dev_dependencies:
 flutter:
   assets:
   - lib/data/output.json
+  - lib/pdf/schedule.pdf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

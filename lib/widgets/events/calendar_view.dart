@@ -43,14 +43,14 @@ class CalendarView extends ConsumerWidget {
         titleCentered: true,
         formatButtonVisible: false,
       ),
-      focusedDay: DateTime(today.year + 1, 1, 1),
+      focusedDay: DateTime(today.year, 1, 1),
       firstDay: DateTime(
-        today.year + 1,
+        today.year,
         1,
         1,
       ),
       lastDay: DateTime(
-        today.year + 1,
+        today.year,
         4,
         30,
       ),

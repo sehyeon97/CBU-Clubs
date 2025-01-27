@@ -23,12 +23,14 @@ class ClubHome extends StatefulWidget {
 class _ClubHomeState extends State<ClubHome> {
   int _selectedIndex = 0;
 
-  final tabs = const [
+  late final tabs = [
     Announcements(),
     Events(),
     Leaderboard(),
     GroupChat(),
-    MeetingTime(),
+    MeetingTime(
+      clubName: widget.club.name,
+    ),
   ];
 
   void onDrawerItemTap(int index) {

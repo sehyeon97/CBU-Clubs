@@ -1,3 +1,4 @@
+// import 'package:club/data/upload_json_to_db.dart';
 import 'package:club/screens/home/home.dart';
 import 'package:club/screens/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +26,8 @@ class MainApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              // run this to update the db to match json
+              // UploadJsonToFS.upload();
               return const HomeScreen();
             }
 

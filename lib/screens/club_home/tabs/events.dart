@@ -27,18 +27,20 @@ class _EventsState extends ConsumerState<Events> {
     Semester semester = ref.watch(eventSemesterProvider);
     EventView view = ref.watch(eventViewProvider);
 
-    return Column(
-      children: [
-        FilterEvents(
-          initalSemester: semester,
-          initialView: view,
-          rebuild: rebuild,
-        ),
-        if (view == EventView.calendar)
-          const CalendarView()
-        else
-          const ViewAsList()
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          FilterEvents(
+            initalSemester: semester,
+            initialView: view,
+            rebuild: rebuild,
+          ),
+          if (view == EventView.calendar)
+            const CalendarView()
+          else
+            const ViewAsList()
+        ],
+      ),
     );
   }
 }
